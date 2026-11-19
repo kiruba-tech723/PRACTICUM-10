@@ -1,0 +1,317 @@
+ <!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Legal Sphere</title> 
+<style> 
+    * { box-sizing: border-box; } 
+    body { 
+        font-family: Arial, sans-serif; 
+        margin: 0; 
+        background: #f2f4f8; 
+        color: #222; 
+        transition: background 0.3s, color 0.3s; 
+    } 
+    body.dark { background: #1b1f2a; color: #eee; } 
+    header { 
+        background: #1f3a5f; 
+        color: white; 
+        padding: 15px 25px; 
+        display: flex; 
+        justify-content: space-between; 
+ 
+ 
+        align-items: center; 
+    } 
+    header h1 { margin: 0; font-size: 24px; } 
+    button { 
+        background: #c9a227; 
+        border: none; 
+        padding: 9px 16px; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        font-weight: bold; 
+    } 
+    button:hover { background: #a98616; } 
+    .container { max-width: 800px; margin: 25px auto; padding: 0 15px; } 
+    .card { 
+        background: white; 
+        padding: 20px; 
+        margin-bottom: 20px; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15); 
+    } 
+    body.dark .card { background: #2a3040; } 
+    .card h2 { margin-top: 0; color: #1f3a5f; } 
+    body.dark .card h2 { color: #e0c46a; } 
+    label { display: block; margin-top: 10px; font-weight: bold; } 
+    input, select, textarea { 
+        width: 100%; 
+        padding: 8px; 
+        margin-top: 5px; 
+        border: 1px solid #999; 
+        border-radius: 4px; 
+        font-size: 15px; 
+    } 
+    textarea { height: 80px; } 
+    .error { color: red; font-size: 13px; min-height: 16px; } 
+    .result { 
+        margin-top: 15px; 
+        padding: 12px; 
+        background: #eaf2ff; 
+        border-left: 5px solid #1f3a5f; 
+        border-radius: 4px; 
+        display: none; 
+        color: #222; 
+    } 
+    .doc-box { 
+        margin-top: 15px; 
+        padding: 15px; 
+        border: 1px dashed #777; 
+        white-space: pre-wrap; 
+        display: none; 
+        line-height: 1.5; 
+    } 
+    .faq-q { 
+        cursor: pointer; 
+        background: #e6e9f0; 
+        padding: 10px; 
+        margin-top: 8px; 
+        border-radius: 4px; 
+ 
+ 
+        font-weight: bold; 
+        color: #222; 
+    } 
+    .faq-a { 
+        display: none; 
+        padding: 10px; 
+        border-left: 3px solid #c9a227; 
+        margin-bottom: 5px; 
+    } 
+    #count { font-size: 13px; text-align: right; } 
+</style> 
+</head> 
+<body> 
+ 
+<header> 
+    <h1 id="title">Legal Sphere</h1> 
+    <button id="themeBtn">Dark Mode</button> 
+</header> 
+ 
+<div class="container"> 
+ 
+    <div class="card"> 
+        <h2>Legal Advisory</h2> 
+        <label for="category">Select Legal Issue</label> 
+        <select id="category"> 
+            <option value="">-- Choose --</option> 
+            <option value="property">Property Dispute</option> 
+            <option value="family">Family Matter</option> 
+            <option value="consumer">Consumer Complaint</option> 
+            <option value="employment">Employment Issue</option> 
+        </select> 
+        <p class="error" id="catError"></p> 
+        <button id="adviceBtn">Get Advice</button> 
+        <div class="result" id="adviceBox"></div> 
+    </div> 
+ 
+    <div class="card"> 
+        <h2>Document Generator</h2> 
+        <label for="docType">Document Type</label> 
+        <select id="docType"> 
+            <option value="rent">Rental Agreement</option> 
+            <option value="affidavit">Affidavit</option> 
+            <option value="notice">Legal Notice</option> 
+        </select> 
+ 
+        <label for="name">Your Name</label> 
+        <input type="text" id="name" placeholder="Enter your full name"> 
+        <p class="error" id="nameError"></p> 
+ 
+        <label for="party">Other Party Name</label> 
+        <input type="text" id="party" placeholder="Enter other party name"> 
+        <p class="error" id="partyError"></p> 
+ 
+        <label for="details">Details</label> 
+        <textarea id="details" maxlength="150" placeholder="Enter details"></textarea> 
+        <div id="count">0 / 150</div> 
+        <p class="error" id="detailsError"></p> 
+ 
+ 
+ 
+        <button id="docBtn">Generate Document</button> 
+        <button id="clearBtn">Clear</button> 
+        <div class="doc-box" id="docBox"></div> 
+    </div> 
+ 
+    <div class="card"> 
+        <h2>Legal FAQs</h2> 
+        <div class="faq-q">What is an FIR?</div> 
+        <div class="faq-a">A First Information Report is a written document prepared by the police 
+when they receive information about a cognizable offence.</div> 
+        <div class="faq-q">What is an Affidavit?</div> 
+        <div class="faq-a">An affidavit is a written statement of facts confirmed by the person 
+making it by oath before an authorised officer.</div> 
+        <div class="faq-q">What is a Legal Notice?</div> 
+        <div class="faq-a">A legal notice is a formal communication sent to a person informing them 
+of an intention to take legal action.</div> 
+    </div> 
+ 
+</div> 
+ 
+<script> 
+    var themeBtn = document.getElementById("themeBtn"); 
+    var category = document.getElementById("category"); 
+    var adviceBtn = document.getElementById("adviceBtn"); 
+    var adviceBox = document.getElementById("adviceBox"); 
+    var catError = document.getElementById("catError"); 
+ 
+    var docType = document.getElementById("docType"); 
+    var nameInput = document.getElementById("name"); 
+    var partyInput = document.getElementById("party"); 
+    var details = document.getElementById("details"); 
+    var count = document.getElementById("count"); 
+    var docBtn = document.getElementById("docBtn"); 
+    var clearBtn = document.getElementById("clearBtn"); 
+    var docBox = document.getElementById("docBox"); 
+    var nameError = document.getElementById("nameError"); 
+    var partyError = document.getElementById("partyError"); 
+    var detailsError = document.getElementById("detailsError"); 
+ 
+    var faqQuestions = document.querySelectorAll(".faq-q"); 
+ 
+    var advice = { 
+        property: "Collect all property papers, check the title deed and send a legal notice before 
+approaching a civil court.", 
+        family: "Try mediation or counselling first. If it fails, consult a family court lawyer with your 
+marriage and identity documents.", 
+        consumer: "Keep the bill and warranty card, send a written complaint to the seller and then 
+file a case in the Consumer Commission.", 
+        employment: "Keep your appointment letter and salary slips. Raise a written complaint with 
+HR and then approach the Labour Department." 
+    }; 
+ 
+    themeBtn.addEventListener("click", function () { 
+        document.body.classList.toggle("dark"); 
+        if (document.body.classList.contains("dark")) { 
+            themeBtn.textContent = "Light Mode"; 
+ 
+        } else { 
+            themeBtn.textContent = "Dark Mode"; 
+        } 
+    }); 
+ 
+    adviceBtn.addEventListener("click", function () { 
+        var value = category.value; 
+        if (value === "") { 
+            catError.textContent = "Please select a legal issue."; 
+            adviceBox.style.display = "none"; 
+        } else { 
+            catError.textContent = ""; 
+            adviceBox.textContent = advice[value]; 
+            adviceBox.style.display = "block"; 
+        } 
+    }); 
+ 
+    details.addEventListener("input", function () { 
+        count.textContent = details.value.length + " / 150"; 
+    }); 
+ 
+    nameInput.addEventListener("input", function () { 
+        if (nameInput.value.trim().length >= 3) { 
+            nameError.textContent = ""; 
+        } else { 
+            nameError.textContent = "Name must have at least 3 characters."; 
+        } 
+    }); 
+ 
+    docBtn.addEventListener("click", function () { 
+        var valid = true; 
+        var name = nameInput.value.trim(); 
+        var party = partyInput.value.trim(); 
+        var text = details.value.trim(); 
+ 
+        if (name.length < 3) { 
+            nameError.textContent = "Name must have at least 3 characters."; 
+            valid = false; 
+        } else { 
+            nameError.textContent = ""; 
+        } 
+ 
+        if (party.length < 3) { 
+            partyError.textContent = "Other party name must have at least 3 characters."; 
+            valid = false; 
+        } else { 
+            partyError.textContent = ""; 
+        } 
+ 
+        if (text.length < 10) { 
+            detailsError.textContent = "Details must have at least 10 characters."; 
+            valid = false; 
+        } else { 
+            detailsError.textContent = ""; 
+        } 
+ 
+        if (!valid) { 
+ 
+ 
+            docBox.style.display = "none"; 
+            return; 
+        } 
+ 
+        var today = new Date().toLocaleDateString(); 
+        var type = docType.value; 
+        var output = ""; 
+ 
+        if (type === "rent") { 
+            output = "RENTAL AGREEMENT\n\nThis agreement is made on " + today + " between " 
++ name + " (Owner) and " + party + " (Tenant).\n\nTerms: " + text + "\n\nSignature of Owner: 
+__________\nSignature of Tenant: __________"; 
+        } else if (type === "affidavit") { 
+            output = "AFFIDAVIT\n\nI, " + name + ", do hereby solemnly affirm before " + party + " 
+that the following is true:\n\n" + text + "\n\nDate: " + today + "\n\nSignature of Deponent: 
+__________"; 
+        } else { 
+            output = "LEGAL NOTICE\n\nDate: " + today + "\nTo: " + party + "\nFrom: " + name + 
+"\n\nTake notice that: " + text + "\n\nYou are requested to respond within 15 days failing which 
+legal action will be taken.\n\nSignature: __________"; 
+        } 
+ 
+        docBox.textContent = output; 
+        docBox.style.display = "block"; 
+    }); 
+ 
+    clearBtn.addEventListener("click", function () { 
+        nameInput.value = ""; 
+        partyInput.value = ""; 
+        details.value = ""; 
+        count.textContent = "0 / 150"; 
+        nameError.textContent = ""; 
+        partyError.textContent = ""; 
+        detailsError.textContent = ""; 
+        docBox.style.display = "none"; 
+    }); 
+ 
+    for (var i = 0; i < faqQuestions.length; i++) { 
+        faqQuestions[i].addEventListener("click", function () { 
+            var answer = this.nextElementSibling; 
+            if (answer.style.display === "block") { 
+                answer.style.display = "none"; 
+            } else { 
+                answer.style.display = "block"; 
+            } 
+        }); 
+    } 
+ 
+    document.getElementById("title").addEventListener("mouseover", function () { 
+        this.style.color = "#c9a227"; 
+    }); 
+    document.getElementById("title").addEventListener("mouseout", function () { 
+        this.style.color = "white"; 
+    }); 
+</script> 
+ 
+</body> 
+</html>
